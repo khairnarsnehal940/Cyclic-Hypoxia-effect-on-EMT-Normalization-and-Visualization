@@ -1,0 +1,81 @@
+library(readr)
+library(ggplot2)
+library(xlsx)
+
+library(dplyr)
+a<- list.files("s:/volcano files/pearson/",pattern="*xlsx")
+setwd("s:/volcano files/pearson/")
+getwd()
+
+ i <- 66
+b <- read.xlsx(a[i] , sheetName="Sheet1")
+b <- na.omit(b)
+b<- b[,-1]
+A <- b
+# remove rows that contain NA values
+
+d <- colnames(A)
+d <- d[1]
+colnames(A) <- NULL
+colnames(A) <- c("CORRELATION","P-VALUE")
+# The psoitive negative correlation  are the ones found in the upper-left and upper-right corners.
+# Add a column to the data frame to specify if they are positive or negative  regulated 
+# add a column of NAs
+A$relation <- "insignificant"
+# if log2Foldchange > 0.6 and pvalue < 0.05, set as "UP" 
+A$relation[A$CORRELATION > 0.3 & A$`P-VALUE`< 0.05] <- "positive"
+# if log2Foldchange < -0.6 and pvalue < 0.05, set as "DOWN"
+A$relation[A$CORRELATION< (-0.3) & A$`P-VALUE`< 0.05] <- "Negative"
+
+#for number of significant positive and negative values
+
+b <- A %>% group_by(relation) %>% summarise(count=n())
+
+filename <- d
+outFile = paste(filename,".png",sep = '')
+setwd("s:/volcano files/pearson/")
+png(outFile)
+
+ ggplot(data=A, aes(x=CORRELATION, y= -log10(`P-VALUE`), col= relation)) +
+  xlab("correlation")+
+  ylab("-Log10(p)")+
+   geom_point( alpha = 0.3,size = 3, position=position_jitter(h=0,w=0)) +
+  scale_color_manual(values=c("grey", "blue","red")) +
+  geom_vline(xintercept=c(-0.3, 0.3), col="black") +
+  geom_hline(yintercept=-log10(0.05), col="black")+
+  annotate("label", x =c(-1.5,1.5), y = 50, label = c((b[1,2]),(b[3,2])), col=c("steelblue","red"), size = 10 )+
+  ggtitle(d)+ 
+  theme(plot.title = element_text(hjust = 0.5)) 
+
+
+
+dev.off()
+
+
+s <-  ggplot(data=A, aes(x=CORRELATION, y= -log10(`P-VALUE`), col= relation)) +
+  xlab("correlation")+
+  ylab("-Log10(p)")+
+  geom_point( alpha = 0.3,size = 3, position=position_jitter(h=0,w=0)) +
+  scale_color_manual(values=c("grey", "blue","red")) +
+  geom_vline(xintercept=c(-0.3, 0.3), col="black") +
+  geom_hline(yintercept=-log10(0.05), col="black")+
+  annotate("label", x =c(-1.5,1.5), y = 50, label = c((b[1,2]),(b[3,2])), col=c("steelblue","red"), size = 10 )+
+  ggtitle(d)+ 
+  theme(plot.title = element_text(hjust = 0.5)) 
+s
+
+
+
+#png(outFile)
+#ggplot(data=A, aes(x=CORRELATION, y= -log10(`P-VALUE`), col= relation)) +
+ # xlab("correlation")+
+ # ylab("-Log10(p)")+
+  #geom_point(size=3, position=position_jitter(h=0.15,w=0.20)) +
+  #scale_color_manual(values=c("grey", "red")) +
+  #geom_vline(xintercept=c(-0.3, 0.3), col="black") +
+  #geom_hline(yintercept=-log10(0.05), col="black")+
+  #annotate("label", x =c(-1.5,1.5), y = 50, label = c((b[3,2]),(b[2,2])), col=c("steelblue","red"), size = 10 )+
+  #ggtitle(d)+ 
+  #theme(plot.title = element_text(hjust = 0.5)) 
+
+#dev.off()
