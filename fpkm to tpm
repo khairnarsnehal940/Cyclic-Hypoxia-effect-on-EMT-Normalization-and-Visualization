@@ -1,0 +1,36 @@
+
+library(readxl)
+library(matlabr)
+library(xlsx)
+library(readr)
+fpkm <- read.csv("s:/SNEHAL/EMT_Scoring_RNASeq-master/DATA/GSE215372/RAW/GSE215372.csv")
+
+#fpkm <- fpkm[,-(1)]
+fpkm <- fpkm[!duplicated(fpkm$gene_name), ]
+row.names(fpkm) <- fpkm[,1]
+fpkm <- fpkm[,c(1,2:7)]
+fpkm <- na.omit(fpkm)
+fpkmToTpm <- do.call(cbind, lapply(2:ncol(fpkm), function(i)
+{
+  exp(log(fpkm[,i]) - log(sum(fpkm[,i])) + log(1e6))
+  
+ 
+}))
+row.names(fpkmToTpm) <- row.names(fpkm)
+
+
+write.csv(fpkmToTpm, "s:/SNEHAL/EMT_Scoring_RNASeq-master/DATA/GSE215372/GSE215372_TPM.csv")
+
+source("s:/EMT_score_func.R")
+## Folder with all the raw read counts
+setwd("s:/SNEHAL/EMT_Scoring_RNASeq-master/DATA/GSE215372/")
+
+fileList = list.files(pattern = "*.csv")
+
+
+gseIDs = sapply(strsplit(fileList, split = "_"), function(x) x[1])
+ 
+
+
+
+ 
