@@ -1,0 +1,191 @@
+install.packages("ggpubr")
+library(ggsignif)
+library(ggplot2)
+library(ggpubr)
+library(readr)
+library(xlsx)
+
+a <- list.files("s:/SNEHAL/barplot/", pattern = ".xlsx")
+i <- 2
+setwd("s:/SNEHAL/barplot/")
+data <- read.xlsx(a[i], sheetName = "GSE48284")
+x <- data$avg
+
+# 76GS plot
+GS_m <- data$X76GS_avg
+GS_sd <- data$X76GS_sd
+
+GS <- ggplot(data, aes(x = x, y = GS_m)) +
+      geom_bar(stat = "identity", aes(fill = x), alpha = 0.8, width = 0.8) +
+      geom_errorbar(aes(x = x, ymin=GS_m-GS_sd, ymax=GS_m+GS_sd), width=0.5, alpha=0.6, size=0.2) +
+      labs(y = "Score", title = "76GS", fill = "Samples") +
+      theme(axis.text.x = element_text(size=8), axis.title.x = element_blank(),
+            axis.text.y = element_text(size=8), axis.title.y = element_text(size=8),
+            title = element_text(size=9),
+            legend.title = element_text(size = 10), legend.text = element_text(size = 8),
+            legend.position = "none") 
+#+  geom_signif(comparisons = list(c("MCF7_0h", "MCF7_12h")), map_signif_level=TRUE)
+
+#+ geom_signif(comparisons = list(c("MCF7_0h", "MCF7_12h")), map_signif_level=TRUE)
+#GS
+
+# KS plot
+KS_m <- data$KS_avg
+KS_sd <- data$KS_sd
+
+KS <- ggplot(data, aes(x = x, y = KS_m)) +
+  geom_bar(stat = "identity", aes(fill = x), alpha = 0.8, width = 0.8) +
+  geom_errorbar(aes(x = x, ymin=KS_m-KS_sd, ymax=KS_m+KS_sd), width=0.5, alpha=0.6, size=0.2) +
+  labs(y = "Score", title = "KS") +
+  theme(axis.text.x = element_blank(), axis.title.x = element_blank(),
+        axis.text.y = element_text(size=8), axis.title.y = element_text(size=8),
+        title = element_text(size=9),
+        legend.position = "none")
+KS
+
+# KS_epi plot
+KS_epi_m <- data$KS_EPITHELIAL_avg
+KS_epi_sd <- data$KS_EPITHELIAL_sd
+
+KS_epi <- ggplot(data, aes(x = x, y = KS_epi_m)) +
+    geom_bar(stat = "identity", aes(fill = x), alpha = 0.8, width = 0.8) +
+    geom_errorbar(aes(x= x, ymin=KS_epi_m-KS_epi_sd, ymax=KS_epi_m+KS_epi_sd), width=0.5, colour="black", alpha=0.9, size=0.2) +
+    labs(, y = "Score", title = "KS_epi") +
+    theme(axis.text.x = element_blank(), axis.title.x = element_blank(),
+        axis.text.y = element_text(size=8), axis.title.y = element_text(size=8),
+        title = element_text(size=9),
+        legend.position = "none") 
+KS_epi
+
+# KS_mes plot
+KS_mes_m <- data$KS_MESENCHYMAL_avg
+KS_mes_sd <- data$KS_MESENCHYMAL_sd
+
+KS_mes <- ggplot(data, aes(x = x, y = KS_epi_m)) +
+  geom_bar(stat = "identity", aes(fill = x), alpha = 0.8, width = 0.8) +
+  geom_errorbar(aes(x= x, ymin=KS_epi_m-KS_epi_sd, ymax=KS_epi_m+KS_epi_sd), width=0.5, colour="black", alpha=0.9, size=0.2) +
+  labs(, y = "Score", title = "KS_mes") +
+  theme(axis.text.x = element_blank(), axis.title.x = element_blank(),
+        axis.text.y = element_text(size=8), axis.title.y = element_text(size=8),
+        title = element_text(size=9),
+        legend.position = "none") 
+KS_mes
+
+# PARTIAL_EMT plot
+p_EMT_m <- data$PARTIAL_EMT_avg
+p_EMT_sd <- data$PARTIAL_EMT_sd
+
+p_EMT <- ggplot(data, aes(x = x, y = p_EMT_m)) +
+    geom_bar(stat = "identity", aes(fill = x), alpha = 0.8, width = 0.8) +
+    geom_errorbar(aes(x = x, ymin=p_EMT_m-p_EMT_sd, ymax=p_EMT_m+p_EMT_sd), width=0.5, colour="black", alpha=0.9, size=0.2) +
+    labs(, y = "Score", title = "PARTIAL_EMT") +
+    theme(axis.text.x = element_blank(), axis.title.x = element_blank(),
+        axis.text.y = element_text(size=8), axis.title.y = element_text(size=8),
+        title = element_text(size=9),
+        legend.position = "none") 
+p_EMT
+
+# HALLMARK_EMT plot
+H_EMT_m <- data$HALLMARK_EPITHELIAL_MESENCHYMAL_TRANSITION_avg
+H_EMT_sd <- data$HALLMARK_EPITHELIAL_MESENCHYMAL_TRANSITION_sd
+
+H_EMT <- ggplot(data, aes(x = x, y = H_EMT_m)) +
+  geom_bar(stat = "identity", aes(fill = x), alpha = 0.8) +
+  geom_errorbar(aes(x = x, ymin=H_EMT_m - H_EMT_sd, ymax=H_EMT_m + H_EMT_sd), width=0.5, colour="black", alpha=0.9, size=0.2) +
+  labs(, y = "Score", title = "HALLMARK_EMT") +
+  theme(axis.text.x = element_blank(), axis.title.x = element_blank(),
+        axis.text.y = element_text(size=8), axis.title.y = element_text(size=8),
+        title = element_text(size=9),
+        legend.position = "none") +  geom_signif(comparisons = list(c("CD34__CML_24h_Imatinib_Normoxia__21__O2__Patient__3", "CD34__CML_96h_Imatinib_Hypoxia__0_5__O2__Patient__5")), map_signif_level=TRUE)
+H_EMT
+
+# OXPHOS plot
+oxphos_m <- data$HALLMARK_OXPHOS_avg
+oxphos_sd <- data$HALLMARK_OXPHOS_sd
+
+oxphos <- ggplot(data, aes(x = x, y = oxphos_m)) +
+  geom_bar(stat = "identity", aes(fill = x), alpha = 0.8) +
+  geom_errorbar(aes(x = x, ymin=oxphos_m - oxphos_sd, ymax=oxphos_m + oxphos_sd), width=0.5, colour="black", alpha=0.9, size=0.2) +
+  labs(, y = "Score", title = "OXPHOS") +
+  theme(axis.text.x = element_blank(), axis.title.x = element_blank(),
+        axis.text.y = element_text(size=8), axis.title.y = element_text(size=8),
+        title = element_text(size=9),
+        legend.position = "none") 
+oxphos
+
+# FAO plot
+fao_m <- data$X.HALLMARK_FAO
+fao_sd <- data$X.HALLMARK_FAO_sd
+
+fao <- ggplot(data, aes(x = x, y = fao_m)) +
+  geom_bar(stat = "identity", aes(fill = x), alpha = 0.8) +
+  geom_errorbar(aes(x = x, ymin=fao_m - fao_sd, ymax=fao_m + fao_sd), width=0.5, colour="black", alpha=0.9, size=0.2) +
+  labs(, y = "Score", title = "FAO") +
+  theme(axis.text.x = element_blank(), axis.title.x = element_blank(),
+        axis.text.y = element_text(size=8), axis.title.y = element_text(size=8),
+        title = element_text(size=9),
+        legend.position = "none") 
+fao
+
+# GLYCOLYSIS plot
+gly_m <- data$HALLMARK_GLYCOLYSIS_avg
+gly_sd <- data$HALLMARK_GLYCOLYSIS_sd
+
+gly <- ggplot(data, aes(x = x, y = gly_m)) +
+  geom_bar(stat = "identity", aes(fill = x), alpha = 0.8) +
+  geom_errorbar(aes(x = x, ymin=gly_m - gly_sd, ymax=gly_m + gly_sd), width=0.5, colour="black", alpha=0.9, size=0.2) +
+  labs(y = "Score", title = "GLYCOLYSIS") +
+  theme(axis.text.x = element_blank(), axis.title.x = element_blank(),
+        axis.text.y = element_text(size=8), axis.title.y = element_text(size=8),
+        title = element_text(size=9),
+        legend.position = "none") 
+gly
+
+# hif1-A plot
+hif1a_m <- data$HIF1.A_avg
+hif1a_sd <- data$HIF1.A_sd
+
+hif1a <- ggplot(data, aes(x = x, y = hif1a_m)) +
+  geom_bar(stat = "identity", aes(fill = x), alpha = 0.8) +
+  geom_errorbar(aes(x= x, ymin=hif1a_m-hif1a_sd, ymax=hif1a_m+hif1a_sd), width=0.5, colour="black", alpha=0.9, size=0.2) +
+  labs(, y = "Score", title = "HIF1-α") +
+  theme(axis.text.x = element_blank(), axis.title.x = element_blank(),
+        axis.text.y = element_text(size=8), axis.title.y = element_text(size=8),
+        title = element_text(size=9),
+        legend.position = "none") 
+hif1a
+
+# hif1a_GE plot
+hif1a_GE_m <- data$HIF1.A_GE_avg
+hif1a_GE_sd <- data$HIF1.A_GE_sd
+
+hif1a_GE <- ggplot(data, aes(x = x, y = hif1a_GE_m)) +
+  geom_bar(stat = "identity", aes(fill = x), alpha = 0.8) +
+  geom_errorbar(aes(x= x, ymin=hif1a_GE_m-hif1a_GE_sd, ymax=hif1a_GE_m+hif1a_GE_sd), width=0.5, colour="black", alpha=0.9, size=0.2) +
+  labs(y = "Score", title = "HIF1-α_GE") +
+  theme(axis.text.x = element_blank(), axis.title.x = element_blank(),
+        axis.text.y = element_text(size=8), axis.title.y = element_text(size=8),
+        title = element_text(size=9),
+        legend.position = "none") 
+hif1a_GE
+
+# hif3a_GE plot
+hif3a_GE_m <- data$HIF3.A_GE_avg
+hif3a_GE_sd <- data$HIF3.A_GE_sd
+
+hif3a_GE <- ggplot(data, aes(x = x, y = hif3a_GE_m)) +
+  geom_bar(stat = "identity", aes(fill = x), alpha = 0.8) +
+  geom_errorbar(aes(x= x, ymin=hif3a_GE_m-hif3a_GE_sd, ymax=hif3a_GE_m+hif3a_GE_sd), width=0.5, colour="black", alpha=0.9, size=0.2) +
+  labs(y = "Score", title = "HIF3-α_GE") +
+  theme(axis.text.x = element_blank(), axis.title.x = element_blank(),
+        axis.text.y = element_text(size=8), axis.title.y = element_text(size=8),
+        title = element_text(size=9),
+        legend.position = "none") 
+hif3a_GE
+filename <- a[i]
+outFile = paste(filename,".png",sep = '')
+setwd("s:/SNEHAL/barplot/")
+png(outFile)
+all <- ggarrange(GS, KS, KS_epi, KS_mes, p_EMT, H_EMT, oxphos, fao, gly, hif1a, hif1a_GE, hif3a_GE, ncol = 4, nrow = 3, common.legend = TRUE, legend = "bottom")
+annotate_figure(all, top=text_grob(a[i],color = "red", face = "bold", size = 14))
+dev.off()
