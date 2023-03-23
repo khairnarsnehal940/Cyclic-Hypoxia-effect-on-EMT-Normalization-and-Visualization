@@ -1,0 +1,30 @@
+setwd("s:/SNEHAL/EMT_Scoring_RNASeq-master/DATA/GSE215372/")
+#read.csv("s:/SNEHAL/EMT_Scoring_RNASeq-master/DATA/GSE174811/GSE174811_fpkm.anno.csv")
+
+fileList = list.files(pattern = "*.csv")
+#gse106491.txt
+counts = read.delim("s:/SNEHAL/EMT_Scoring_RNASeq-master/DATA/GSE215372/GSE215372_genes_FPKM_expression.txt",sep = "\t")
+
+
+
+
+counts <- as.data.frame(counts)
+
+counts1 <- as.data.frame(counts)
+{
+counts$column1 <- as.numeric(as.character(counts$column1))
+counts <- counts[with(counts, ave(H12h_1, gene_name, FUN=max)== column1),]
+
+#conditions for all columns in datasets
+
+}
+
+#condition3 - REMOVE duplicate WITH 0 values 
+counts <- counts[!duplicated(counts$gene_name), ]
+counts <- na.omit(counts)
+
+row.names(counts) <- counts$gene_name
+
+setwd("s:/SNEHAL/EMT_Scoring_RNASeq-master/DATA/GSE215372/")
+ write.csv(counts, "GSE215372.csv")
+]
