@@ -1,0 +1,14 @@
+library(readr)
+RPKM <- read.delim("s:/SNEHAL/EMT_Scoring_RNASeq-master/DATA/GSE52695/GSE52695_Ovarian_RefSeq_RPKM_Values.txt",sep = "\t")
+A <- RPKM[,1]
+RPKM <- RPKM[,-1]
+#colnames(fpkm) <- NULL
+#colnames(fpkm) <- c("GSE_ID","1","2","3","4","5","6","7","8","9","10")
+
+
+  rpkmToTpm <- apply(RPKM, 2, function(x) x / sum(as.numeric(x)) * 10^6) %>% as.data.frame()
+  
+
+a <- cbind(A,rpkmToTpm)
+rownames(a) <- a[,1]
+write.csv(a, "s:/SNEHAL/EMT_Scoring_RNASeq-master/DATA/GSE52695/GSE52695.csv")
