@@ -1,0 +1,20 @@
+install.packages("readr")
+install.packages("data.table")
+
+library(xlsx)
+library(readr)
+library(data.table)
+
+setwd("S:/SNEHAL/EMT_Scoring_RNASeq-master/DATA/GSE198308/")
+myfiles <-list.files(path="S:/SNEHAL/EMT_Scoring_RNASeq-master/DATA/GSE198308/", pattern = ".txt")
+b <- fread(myfiles[1])
+b<- b[,c(1)]
+as.data.frame(b)
+
+
+for(i in 1:length(myfiles)){
+  A =fread(myfiles[i])
+  A <- A[,2]
+  b <- cbind(b,A)
+  }
+write.csv(b,"S:/SNEHAL/EMT_Scoring_RNASeq-master/DATA/GSE198308/GSE193808.csv")
