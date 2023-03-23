@@ -1,0 +1,46 @@
+library(readr)
+library(xlsx)
+A <- list.files("s:/SNEHAL/LASTSETFINAL/",pattern = ".xlsx")
+for(i in 14:17){
+  setwd("s:/SNEHAL/LASTSETFINAL/")
+i <- 1
+  filename <- A[i]
+  
+  B <- read.xlsx(  A[i] , sheetName = "Sheet1")
+  #B <- B[,-(12)]
+  B <- B[,-(1)]
+  corVal = NULL
+  
+  for (j in 1:9){
+    for(h in (j+1):10){
+    
+
+  B <- as.matrix(B)
+ #e<- cor(B, method = "spearman")
+  c <- cor.test(as.numeric(B[,j]),as.numeric(B[,h]),method = "spearman")
+  c = matrix(unlist(c), byrow = TRUE)
+  #c <- cor.test(B[,j],B[,h],method = "pearson")
+   d <- c[2:3]
+   
+
+
+   corVal = rbind(corVal,c(c[2,],c[3,]))
+   corVal = as.matrix(corVal)
+   #rownames(corVal) <- colnames(B[,j:h]) 
+   #corVal = as.data.frame(corVal)
+    
+    }
+  }
+  
+  #write.csv(corVal,"GSE106959.csv")
+  setwd("s:/SNEHAL/LASTSETFINAL/spearman/")
+  fileName = trimws(paste( A[i],"new_correl_spearman.xlsx",sep="_"))
+  outFileName = paste("s:/SNEHAL/LASTSETFINAL/spearman/",fileName,sep = "/")
+    write.xlsx( corVal, outFileName , sheetName = "1" )
+    
+  
+}
+
+
+
+
